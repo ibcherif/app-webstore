@@ -27,14 +27,20 @@ class RegisterType extends AbstractType
             ])
             ->add('lastname', TextType::class,[
                 'label' => 'Votre Nom',
-                'constraints' => new Length(3,60),
+                'constraints' => new Length([
+                    'min' => 3,
+                    'max' =>60
+                ]),
                 'attr' => [
                     'placeholder' => 'Merci de saisir votre Nom'
                 ]
             ])
             ->add('email',EmailType::class,[
                 'label' => 'Votre Email',
-                'constraints' => new Length(3,100),
+                'constraints' => new Length([
+                    'min' => 6,
+                    'max'=> 100
+                ]),
                 'attr' => [
                     'placeholder' => 'Merci de saisir votre Email'
                 ]
