@@ -19,19 +19,9 @@ class CartController extends AbstractController
     #[Route('/mon-panier', name: 'app_cart')]
     public function index(Cart $cart): Response
     {
-        $dataCart=$cart->get();
-        $cartComplete=[];
-        if (!empty($dataCart)){
-            foreach($dataCart as $id=>$quantity){
-                $cartComplete[]=[
-                    'product' =>$this->entityManager->getRepository(Product::class)->findOneById($id),
-                    'quantity' =>$quantity
-                ];
-            }
-        }
 
         return $this->render('cart/index.html.twig',[
-            'cart'=>$cartComplete
+            'cart'=>$cart->getFull()
         ]);
     }
 
@@ -41,9 +31,21 @@ class CartController extends AbstractController
         return $this->redirectToRoute('app_cart');
     }
 
+    #[Route('/cart/decrease/{id}', name: 'decrease_to_cart')]
+    public function decrease(Cart $cart,$id){
+        $cart->decrease($id);
+        return $this->redirectToRoute('app_cart');
+    }
+
     #[Route('/cart/remove', name: 'remove_to_cart')]
     public function remove(Cart $cart){
         $cart->remove();
+        return $this->redirectToRoute('app_cart');
+    }
+
+    #[Route('/cart/delete/{id}', name: 'delete_to_cart')]
+    public function delete(Cart $cart,$id){
+        $cart->delete($id);
         return $this->redirectToRoute('app_cart');
     }
 }

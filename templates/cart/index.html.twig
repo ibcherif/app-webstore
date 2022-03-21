@@ -6,7 +6,8 @@
     <h1>Mon panier</h1>
     Retrouvez l'ensemble des produits que vous avez ajouté à votre panier.
     <hr>
-    <table class="table">
+    {% if cart|length > 0 %}
+    <table class="table mt-3">
         <thead>
         <tr>
             <th scope="col">Produit</th>
@@ -27,9 +28,22 @@
                     {{ product.product.name }}<br/>
                     <small>{{ product.product.subtitle }}</small>
                 </td>
-                <td>x {{ product.quantity }}</td>
+                <td>
+                    <a href="{{ path('decrease_to_cart',{'id':product.product.id}) }}">
+                        <img src="{{ asset('assets/img/moins.png') }}" height="12px" alt="diminuer la quantité">
+                    </a>
+                    x {{ product.quantity }}
+                    <a href="{{ path('add_to_cart',{'id':product.product.id}) }}">
+                        <img src="{{ asset('assets/img/plus.png') }}" height="12 px" alt="augmenter la quantité">
+                    </a>
+                </td>
                 <td>{{(product.product.price / 100)|number_format(2,',','.') }}€</td>
                 <td>{{ ((product.product.price * product.quantity)/100)|number_format(2,',','.') }}€</td>
+                <td>
+                    <a href="{{ path('delete_to_cart',{'id':product.product.id}) }}">
+                        <img src="{{ asset('assets/img/delete.png') }}" height="20px" alt="Supprimer mon produit">
+                    </a>
+                </td>
             </tr>
             {% set total = total + (product.product.price * product.quantity) %}
         {% endfor %}
@@ -38,7 +52,10 @@
      <div class="text-right">
          <b>Nombre de produit :</b> {{ cart|length }}<br/>
          <b>Total de mon panier :</b> {{ (total/100)|number_format(2, ',', '.') }} €
-         <a href="" class="btn btn-success btn-block">Valider mon panier</a>
+         <a href="" class="btn btn-success btn-block mt-3">Valider mon panier</a>
      </div>
+    {% else %}
+        <p>Votre panier est Vide</p>
+    {% endif %}
     <hr>
 {% endblock %}
