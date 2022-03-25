@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Payement de ma Commande{% endblock %}
+{% block javaScript %}
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
 
 {% block content %}
     <h2>Mon récapitulatif</h2>
@@ -51,7 +54,9 @@
             <strong>Livraison : </strong> {{  (carrier.price )|number_format(2,',','.') }} €
             <hr>
             <strong>Total : </strong>  {{  ((total / 100)+carrier.price )|number_format(2,',','.') }} €
-            <a href="" class="btn btn-success btn-block mt-3">Payer | {{  ((total / 100)+carrier.price )|number_format(2,',','.') }} €</a>
+            <a href="{{ path('app_stripe_create_session') }}" class="btn btn-success btn-block mt-3" >Payer | {{  ((total / 100)+carrier.price )|number_format(2,',','.') }} €</a>
         </div>
     </div>
 {% endblock %}
+
+
