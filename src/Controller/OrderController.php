@@ -55,7 +55,9 @@ class OrderController extends AbstractController
             $delivery_content .= '<br/>'.$delivery->getAddress();
             $delivery_content .= '<br/>'.$delivery->getPostal().' '.$delivery->getCity();
             $delivery_content .= '<br/>'.$delivery->getCountry();
+            $reference = $date->format('dmy').'-'.uniqid();
             $order = new Order();
+            $order->setReference($reference);
             $order->setUser($this->getUser());
             $order->setCreateAt($date);
             $order->setCarrierName($carrier->getName());
@@ -81,6 +83,7 @@ class OrderController extends AbstractController
                 'cart' => $cart->getFull(),
                 'carrier' => $carrier,
                 'delivery' => $delivery_content,
+                'reference' => $order->getReference()
             ]);
 
         }
