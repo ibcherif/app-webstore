@@ -6,6 +6,7 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -20,7 +21,7 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'datetime')]
     private $createAt;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -43,6 +44,13 @@ class Order
         $this->orderDetails = new ArrayCollection();
     }
 
+    public function getTotal(){
+        $total = null;
+        foreach ($this->getOrderDetails()->getValues() as $product){
+            $total+=$product->getPrice()*$product->getQuantity();
+        }
+        return $total;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -60,12 +68,12 @@ class Order
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeImmutable
+    public function getCreateAt(): ?\DateTime
     {
         return $this->createAt;
     }
 
-    public function setCreateAt(\DateTimeImmutable $createAt): self
+    public function setCreateAt(\DateTime $createAt): self
     {
         $this->createAt = $createAt;
 

@@ -7,12 +7,10 @@ use App\Entity\Order;
 use App\Entity\OrderDetails;
 use App\Form\OrderType;
 use Doctrine\ORM\EntityManagerInterface;
-use Monolog\DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class OrderController extends AbstractController
 {
@@ -48,7 +46,7 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() and $form->isValid()){
-            $date = new DateTimeImmutable(false);
+            $date = new \DateTime();
             $carrier =$form->get('carriers')->getData();
             $delivery = $form->get('addresses')->getData();
             $delivery_content = $delivery->getFirstname().' '.$delivery->getLastname();
