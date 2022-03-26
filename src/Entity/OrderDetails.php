@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OrderDetailsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: OrderDetailsRepository::class)]
 class OrderDetails
@@ -29,6 +30,9 @@ class OrderDetails
     #[ORM\Column(type: 'float')]
     private $total;
 
+    #[Pure] public function __toString(){
+        return $this->getProduct().' x'.$this->getQuantity();
+    }
     public function getId(): ?int
     {
         return $this->id;
