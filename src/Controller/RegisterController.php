@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Class\Mail;
 use App\Entity\User;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,16 +24,25 @@ class RegisterController extends AbstractController
         $user=new User();
         $form=$this->createForm(RegisterType::class,$user);
         $form->handleRequest($request);
+        $notification="";
         if ($form->isSubmitted() and $form->isValid()){
             $user=$form->getData();
-            $password=$encoder->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $search_email= $this->entityManager->getRepository(User::class)->findOneByEmail($user->getEmail());
+            if(!$search_email){
+                $password=$encoder->hashPassword($user, $user->getPassword());
+                $user->setPassword($password);
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+                $mail = new Mail();
+                $content="Bonjour ".$user->getFirstname().",<br/>"."Bienvenu et Merci de compter parmis nous sur le app-WebStore";
+                $mail->send($user->getEmail(),$user->getFirstname(),'Bienvenue sur le app-webStore',$content);
+                $notification ="Votre inscription s'est correctement déroulée. Vous pouvez dès à présent vous connecter à votre compte";
+            }else $notification="l'email que vous avez renseigné existe déja";
         }
 
         return $this->render('register/index.html.twig',[
-            'form'=>$form->createView()
+            'form'=>$form->createView(),
+            'notification' => $notification
         ]);
     }
 }
