@@ -52,7 +52,7 @@
             </ul>
             <div class="navbar-item-custom">
                 {% if app.user %}
-                    <a href="{{ path('app_account') }}">Mon Compte (<small>{{ app.user.firstname }})</small></a> | <a href="{{ path('app_logout') }}">Deconnection</a>
+                    <a href="{{ path('app_account') }}">Mon Compte (<small>{{ app.user.firstname }})</small></a> | <a href="{{ path('app_logout') }}">Déconnexion</a>
                 {% else %}
                     <a href="{{ path('app_login') }}">Connection</a> | <a href="{{ path('app_register') }}">Inscription</a>
                 {% endif %}
