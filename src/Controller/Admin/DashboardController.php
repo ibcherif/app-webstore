@@ -27,7 +27,7 @@ class DashboardController extends AbstractDashboardController
     public function index() : Response
     {
 
-        $url = $this->adminUrlGenerator->setController(UserCrudController::class)->generateUrl();
+        $url = $this->adminUrlGenerator->setController(OrderCrudController::class)->generateUrl();
         return $this->redirect($url);
 
         //return parent::index();
