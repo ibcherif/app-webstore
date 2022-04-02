@@ -21,9 +21,9 @@ class OrderSuccessController extends AbstractController
     {
         $order =$this->entityManager->getRepository(Order::class)->findOneByStripeSessionId($stripeSessionId);
         if(!$order || $order->getUser()!=$this->getUser()) return $this->redirectToRoute('app_home');
-        if(!$order->getIsPaid()){
+        if($order->getState()==0){
             $cart->remove();
-            $order->setIsPaid(1);
+            $order->setState(1);
             $this->entityManager->flush();
             $mail = new Mail();
             $content="Bonjour ".$order->getUser()->getFirstname().",<br/>"."Merci pour votre commande sur le app-WebStore";
